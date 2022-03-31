@@ -9,5 +9,4 @@ class DataJpaApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
