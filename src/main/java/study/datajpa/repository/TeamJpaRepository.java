@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import study.datajpa.entity.Team;
 
 @Repository // Component Scan을 위해 넣는다
-public class TeamRepository {
+public class TeamJpaRepository {
 
 	@PersistenceContext // JPA의 EntityManager를 injection 해주는 Annotation
 	private EntityManager em;

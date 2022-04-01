@@ -23,6 +23,9 @@ class MemberRepositoryTest {
 	@Test
 	void testMember() throws Exception{
 
+		// proxy 객체를 반환한다. memberRepository에 데이터 JPA가 구현체를 만들어서 Injection한다
+		System.out.println("memberRepository = " + memberRepository.getClass());
+
 		// 저장
 		Member member = new Member("memberA");
 		Member savedmember = memberRepository.save(member);
