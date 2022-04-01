@@ -1,7 +1,10 @@
 package study.datajpa.entity;
 
+import static javax.persistence.FetchType.LAZY;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,7 +28,7 @@ public class Member {
 	private String username;
 	private int age;
 
-	@ManyToOne
+	@ManyToOne(fetch = LAZY) // ToOne 관계는 기본 fetch 타입이 EAGER이므로, 반드시 LAZY로 변경. 즉시로딩은 성능 최적화가 어렵다.
 	@JoinColumn(name = "team_id") // forign key 이름을 이용해 연관관계 매
 	private Team team;
 
@@ -62,3 +65,4 @@ public class Member {
 		this.username = username;
 	}
 }
+
