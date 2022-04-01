@@ -40,6 +40,14 @@ public class Member {
 		this.username = username;
 	}
 
+	public Member(String username, int age, Team team) {
+		this.username = username;
+		this.age = age;
+		if (team != null) {
+			changeTeam(team); // 연관관계 세팅 메서드를 이용해 생성된 member와 team을 연결
+		}
+	}
+
 	// 서로 연관관계를 세팅해주는 메서드가 필요하다
 	// Team을 변경할 때 사용
 	public void changeTeam(Team team) {
