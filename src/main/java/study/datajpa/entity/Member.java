@@ -38,7 +38,7 @@ public class Member {
 //	protected Member() {
 //	}
 
-	// 생성자 방식의 주입은 setter를 없앨 수 있다
+	// 생성자 방식의 주입을 사용하면 setter를 대체할 수 있다
 	public Member(String username) {
 		this.username = username;
 	}
