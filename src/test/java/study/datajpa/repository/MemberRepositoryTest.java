@@ -1,7 +1,6 @@
 package study.datajpa.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,4 +76,29 @@ class MemberRepositoryTest {
 		assertThat(deletedCount).isEqualTo(0);
 	}
 
+
+	@Test
+	public void findByUsernameAndAgeGreaterThenTest() {
+		Member m1 = new Member("AAA", 10);
+		Member m2 = new Member("AAA", 20);
+		memberRepository.save(m1);
+		memberRepository.save(m2);
+
+		// 인터페이스에 메서드만 만들어 놓으면, 메서드 생성 규칙에 의해 자동으로 메서드를 구현해 준다.
+		List<Member> result = memberRepository.findByUsernameAndAgeGreaterThan("AAA", 15);
+
+		assertThat(result.get(0).getUsername()).isEqualTo("AAA");
+		assertThat(result.get(0).getAge()).isEqualTo(20);
+	}
+	
+	@Test
+	void findHelloBy() throws Exception{
+		List<Member> helloBy = memberRepository.findTop2HelloBy();
+
+		// given
+	
+	// when
+	
+	// then
+	}
 }

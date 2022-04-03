@@ -4,7 +4,6 @@ import static javax.persistence.FetchType.LAZY;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -43,9 +42,14 @@ public class Member {
 		this.username = username;
 	}
 
-	public Member(String username, int age, Team team) {
+	public Member(String username, int age2) {
 		this.username = username;
-		this.age = age;
+		this.age = age2;
+	}
+
+	public Member(String username, int age2, Team team) {
+		this.username = username;
+		this.age = age2;
 		if (team != null) {
 			changeTeam(team); // 연관관계 세팅 메서드를 이용해 생성된 member와 team을 연결
 		}
