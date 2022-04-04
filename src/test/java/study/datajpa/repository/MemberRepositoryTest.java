@@ -19,9 +19,9 @@ class MemberRepositoryTest {
 
 	@Autowired
 	MemberRepository memberRepository;
-	
+
 	@Test
-	void testMember() throws Exception{
+	void testMember() throws Exception {
 
 		// proxy 객체를 반환한다. memberRepository에 데이터 JPA가 구현체를 만들어서 Injection한다
 		System.out.println("memberRepository = " + memberRepository.getClass());
@@ -90,15 +90,22 @@ class MemberRepositoryTest {
 		assertThat(result.get(0).getUsername()).isEqualTo("AAA");
 		assertThat(result.get(0).getAge()).isEqualTo(20);
 	}
-	
-	@Test
-	void findHelloBy() throws Exception{
-		List<Member> helloBy = memberRepository.findTop2HelloBy();
 
-		// given
-	
-	// when
-	
-	// then
+	@Test
+	void findHelloBy() throws Exception {
+		List<Member> helloBy = memberRepository.findTop2HelloBy();
+	}
+
+
+	@Test
+	void namedQuery() throws Exception {
+		Member m1 = new Member("AAA", 10);
+		Member m2 = new Member("BBB", 20);
+		memberRepository.save(m1);
+		memberRepository.save(m2);
+
+		List<Member> result = memberRepository.findByUsername("AAA");
+		Member findMember = result.get(0);
+		assertThat(findMember).isEqualTo(m1);
 	}
 }
