@@ -18,4 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	//@Query(name = "Member.findByUsername") // @Query는 일정한 규칙으로 자동 탐색이 가능하다 => 타입.메서드명
 	List<Member> findByUsername(@Param("username") String username);
 
+	@Query("select m from Member m where m.username = :username and m.age = :age")
+	List<Member> findUser(@Param("username") String username, @Param("age") int age);
+
 }
