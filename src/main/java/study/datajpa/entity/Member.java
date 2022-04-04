@@ -47,9 +47,9 @@ public class Member {
 		this.username = username;
 	}
 
-	public Member(String username, int age2) {
+	public Member(String username, int age) {
 		this.username = username;
-		this.age = age2;
+		this.age = age;
 	}
 
 	public Member(String username, int age2, Team team) {

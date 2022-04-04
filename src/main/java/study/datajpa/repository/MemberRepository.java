@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,6 +45,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	// 스프링 데이터 JPA를 이용한 페이징과 정렬
 	// 인터페이스만으로도 페이징 기능이 포함된 쿼리를 작성할 수 있다
-	Page<Member> findByAge(int age, Pageable pageable);
+	//Page<Member> findByAge(int age, Pageable pageable);
+
+
+	Slice<Member> findByAge(int age, Pageable pageable);
 }
 

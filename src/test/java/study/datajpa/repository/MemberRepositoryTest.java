@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.annotation.Rollback;
@@ -219,23 +220,57 @@ class MemberRepositoryTest {
 		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Direction.DESC, "username"));
 		
 		// when
-		Page<Member> page = memberRepository.findByAge(age, pageRequest);
+		//Page<Member> page = memberRepository.findByAge(age, pageRequest);
 
 		// Page를 사용하면 반환되는 데이터에 total count가 기본으로 포함된다
-		List<Member> content = page.getContent(); // getContent()를 이용해 데이터를 꺼낼 수 있다
-		long totalElements = page.getTotalElements();// total count와 동일한 기능을 한다
+//		List<Member> content = page.getContent(); // getContent()를 이용해 데이터를 꺼낼 수 있다
+//		long totalElements = page.getTotalElements();// total count와 동일한 기능을 한다
+//
+//		for (Member member : content) {
+//			System.out.println("member = " + member);
+//		}
+//		System.out.println("totalElements = " + totalElements);
+//
+//		assertThat(content.size()).isEqualTo(3); // 페이지당 사이즈
+//		assertThat(page.getTotalElements()).isEqualTo(10); // 전체 수량
+//		assertThat(page.getNumber()).isEqualTo(0); // 페이지 번호
+//		assertThat(page.getTotalPages()).isEqualTo(4); // 전체 페이지 갯수
+//		assertThat(page.isFirst()).isTrue();
+//		assertThat(page.hasNext()).isTrue();
 
-		for (Member member : content) {
-			System.out.println("member = " + member);
-		}
-		System.out.println("totalElements = " + totalElements);
+	}
+
+	@Test
+	void sliceTest() throws Exception{
+
+		// given
+		memberRepository.save(new Member("member1", 10));
+		memberRepository.save(new Member("member2", 10));
+		memberRepository.save(new Member("member3", 10));
+		memberRepository.save(new Member("member4", 10));
+		memberRepository.save(new Member("member5", 10));
+		memberRepository.save(new Member("member6", 10));
+		memberRepository.save(new Member("member7", 10));
+		memberRepository.save(new Member("member8", 10));
+		memberRepository.save(new Member("member9", 10));
+		memberRepository.save(new Member("member99", 10));
+
+		int age = 10;
+		// PageRequest 객체를 만들고 조건을 세팅한다
+		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Direction.DESC, "username"));
+
+		// when
+		Slice<Member> slice = memberRepository.findByAge(age, pageRequest);
+
+		// Page를 사용하면 반환되는 데이터에 total count가 기본으로 포함된다
+		List<Member> content = slice.getContent(); // getContent()를 이용해 데이터를 꺼낼 수 있다
 
 		assertThat(content.size()).isEqualTo(3); // 페이지당 사이즈
-		assertThat(page.getTotalElements()).isEqualTo(10); // 전체 수량
-		assertThat(page.getNumber()).isEqualTo(0); // 페이지 번호
-		assertThat(page.getTotalPages()).isEqualTo(4); // 전체 페이지 갯수
-		assertThat(page.isFirst()).isTrue();
-		assertThat(page.hasNext()).isTrue();
+//		assertThat(slice.getTotalElements()).isEqualTo(10); // 전체 수량
+		assertThat(slice.getNumber()).isEqualTo(0); // 페이지 번호
+//		assertThat(slice.getTotalPages()).isEqualTo(4); // 전체 페이지 갯수
+		assertThat(slice.isFirst()).isTrue();
+		assertThat(slice.hasNext()).isTrue();
 
 	}
 }
