@@ -185,5 +185,9 @@ class MemberRepositoryTest {
 		Optional<Member> findOptionalMember = memberRepository.findOptionalByUsername("AAA");
 		System.out.println("findOptionalMember = " + findOptionalMember);
 		System.out.println("findOptionalMember.get() = " + findOptionalMember.get());
+
+		// 단건 조회시 데이터가 없는 경우
+		Member findNoMember = memberRepository.findMemberByUsername("asdf");
+		System.out.println("findNoMember = " + findNoMember); // Spring Data JPA는 단건 조회시 데이터가 없을 경우 예외 발생 대신 null을 반환한다.
 	}
 }
