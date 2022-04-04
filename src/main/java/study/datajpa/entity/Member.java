@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,10 @@ import lombok.ToString;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 스펙은 기본 생성자를 필요로 한다
 @ToString(of = {"id", "usename", "age"}) // 객체를 찍을 때 정보를 바로 출력한다
+@NamedQuery(
+	name = "Member.findByUsername",
+	query ="select m from Member m where m.username = :username"
+)
 public class Member {
 
 	@Id

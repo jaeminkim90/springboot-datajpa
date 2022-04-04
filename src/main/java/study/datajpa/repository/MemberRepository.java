@@ -12,4 +12,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	List<Member> findTop2HelloBy();
 
+
+
 }
