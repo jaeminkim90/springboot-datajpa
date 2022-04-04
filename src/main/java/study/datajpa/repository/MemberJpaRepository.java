@@ -58,9 +58,8 @@ public class MemberJpaRepository {
 	}
 
 	public List<Member> findByUsername(String username) {
-		em.createNamedQuery("Member.findByUsername", Member.class) // 지정해 놓은 이름을 이용해 쿼리를 불러오는 방식
-			.setParameter("username", "회원1") // Query에 변수로 들어가는 username 세팅
+		return em.createNamedQuery("Member.findByUsername", Member.class) // 지정해 놓은 이름을 이용해 쿼리를 불러오는 방식
+			.setParameter("username", username) // Query에 변수로 들어가는 username 세팅
 			.getResultList(); // 결과를 받는다
-
 	}
 }
