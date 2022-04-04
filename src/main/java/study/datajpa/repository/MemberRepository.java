@@ -15,7 +15,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	List<Member> findTop2HelloBy();
 
 	// Interface를 이용해 NamedQuery를 사용하는 방법
-	@Query(name = "Member.findByUsername")
+	//@Query(name = "Member.findByUsername") // @Query는 일정한 규칙으로 자동 탐색이 가능하다 => 타입.메서드명
 	List<Member> findByUsername(@Param("username") String username);
 
 }
