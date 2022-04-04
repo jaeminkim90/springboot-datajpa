@@ -172,22 +172,26 @@ class MemberRepositoryTest {
 	@Test
 	void returnType() throws Exception {
 		Member m1 = new Member("AAA", 10);
-		Member m2 = new Member("BBB", 20);
+		Member m2 = new Member("AAA", 20);
 		memberRepository.save(m1);
 		memberRepository.save(m2);
 
-		List<Member> aaa = memberRepository.findListByUsername("AAA");
-		System.out.println("aaa = " + aaa);
-
-		Member findMember = memberRepository.findMemberByUsername("AAA");
-		System.out.println("findMember = " + findMember);
-
-		Optional<Member> findOptionalMember = memberRepository.findOptionalByUsername("AAA");
-		System.out.println("findOptionalMember = " + findOptionalMember);
-		System.out.println("findOptionalMember.get() = " + findOptionalMember.get());
+//		List<Member> aaa = memberRepository.findListByUsername("AAA");
+//		System.out.println("aaa = " + aaa);
+//
+//		Member findMember = memberRepository.findMemberByUsername("AAA");
+//		System.out.println("findMember = " + findMember);
+//
+//		Optional<Member> findOptionalMember = memberRepository.findOptionalByUsername("AAA");
+//		System.out.println("findOptionalMember = " + findOptionalMember);
+//		System.out.println("findOptionalMember.get() = " + findOptionalMember.get());
 
 		// 단건 조회시 데이터가 없는 경우
 		Member findNoMember = memberRepository.findMemberByUsername("asdf");
 		System.out.println("findNoMember = " + findNoMember); // Spring Data JPA는 단건 조회시 데이터가 없을 경우 예외 발생 대신 null을 반환한다.
+
+		// 단건 조회 시, 결과가 2개 이상일 경우 예외 발생
+		Optional<Member> findMember = memberRepository.findOptionalByUsername("AAA");
+		System.out.println("findMember = " + findMember);
 	}
 }
