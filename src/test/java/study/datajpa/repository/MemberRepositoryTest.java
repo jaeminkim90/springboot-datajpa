@@ -8,6 +8,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
@@ -193,5 +197,28 @@ class MemberRepositoryTest {
 		// 단건 조회 시, 결과가 2개 이상일 경우 예외 발생
 		Optional<Member> findMember = memberRepository.findOptionalByUsername("AAA");
 		System.out.println("findMember = " + findMember);
+	}
+
+	@Test
+	void paging() throws Exception{
+
+		// given
+		memberRepository.save(new Member("member1", 10));
+		memberRepository.save(new Member("member2", 10));
+		memberRepository.save(new Member("member3", 10));
+		memberRepository.save(new Member("member4", 10));
+		memberRepository.save(new Member("member5", 10));
+		memberRepository.save(new Member("member6", 10));
+		memberRepository.save(new Member("member7", 10));
+		memberRepository.save(new Member("member8", 10));
+		memberRepository.save(new Member("member9", 10));
+		memberRepository.save(new Member("member99", 10));
+
+		int age = 10;
+		// PageRequest 객체를 만들고 조건을 세팅한다
+		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Direction.DESC, "username"));
+		
+		// when
+		Page<Member> page = memberRepository.findByAge(age, pageRequest);
 	}
 }
