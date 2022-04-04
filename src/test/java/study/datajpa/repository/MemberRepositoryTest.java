@@ -2,6 +2,8 @@ package study.datajpa.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -148,9 +150,23 @@ class MemberRepositoryTest {
 		memberRepository.save(m1); // member 세팅
 
 		List<MemberDto> memberDto = memberRepository.findMemberDto();
-		for (MemberDto dto  : memberDto) {
+		for (MemberDto dto : memberDto) {
 			System.out.println("dto = " + dto);
 			System.out.println("memberDto = " + memberDto);
+		}
+	}
+
+	@Test
+	void findByNames() throws Exception {
+		Member m1 = new Member("AAA", 10);
+		Member m2 = new Member("BBB", 20);
+		memberRepository.save(m1);
+		memberRepository.save(m2);
+
+		List<Member> memberList = memberRepository.findByNames(Arrays.asList("AAA", "BBB"));
+
+		for (Member member : memberList) {
+			System.out.println("member = " + member);
 		}
 	}
 }
