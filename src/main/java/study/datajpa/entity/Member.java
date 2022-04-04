@@ -28,7 +28,7 @@ public class Member {
 	@Id
 	@GeneratedValue
 	@Column(name = "member_id") // DB 테이블에 매핑하는 이름을 지정할 수 있다
-	private Long Id;
+	private Long id;
 	private String username;
 	private int age;
 
