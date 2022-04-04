@@ -229,5 +229,13 @@ class MemberRepositoryTest {
 			System.out.println("member = " + member);
 		}
 		System.out.println("totalElements = " + totalElements);
+
+		assertThat(content.size()).isEqualTo(3); // 페이지당 사이즈
+		assertThat(page.getTotalElements()).isEqualTo(10); // 전체 수량
+		assertThat(page.getNumber()).isEqualTo(0); // 페이지 번호
+		assertThat(page.getTotalPages()).isEqualTo(4); // 전체 페이지 갯수
+		assertThat(page.isFirst()).isTrue();
+		assertThat(page.hasNext()).isTrue();
+
 	}
 }
