@@ -62,4 +62,22 @@ public class MemberJpaRepository {
 			.setParameter("username", username) // Query에 변수로 들어가는 username 세팅
 			.getResultList(); // 결과를 받는다
 	}
+
+
+	// 페이징에 필요한 컨텐츠를 offset과 limit로 자라서 가져오는 쿼리
+	// offset: 페이징 시작 지점 설정, limit: 페이징 당 들어가는 데이터 수량 설정
+	public List<Member> findByPage(int age, int offset, int limit) {
+		return em.createQuery("select m from Member m where m.age = :age order by m.username desc")
+			.setParameter("age", age)
+			.setFirstResult(offset) // 어디서부터(몇번째부터) 가져올 건지 설정
+			.setMaxResults(limit) // 페이징 한 번에 가져오는 갯수를 설정
+			.getResultList();
+	}
+
+	// 전체 수량을 파악하는 쿼 리
+	public long totalCount(int age) {
+		return em.createQuery("select count(m) from Member m where m.age = :age", Long.class)
+			.setParameter("age", age)
+			.getSingleResult();
+	}
 }
