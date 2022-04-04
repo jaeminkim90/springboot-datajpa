@@ -220,5 +220,14 @@ class MemberRepositoryTest {
 		
 		// when
 		Page<Member> page = memberRepository.findByAge(age, pageRequest);
+
+		// Page를 사용하면 반환되는 데이터에 total count가 기본으로 포함된다
+		List<Member> content = page.getContent(); // getContent()를 이용해 데이터를 꺼낼 수 있다
+		long totalElements = page.getTotalElements();// total count와 동일한 기능을 한다
+
+		for (Member member : content) {
+			System.out.println("member = " + member);
+		}
+		System.out.println("totalElements = " + totalElements);
 	}
 }
