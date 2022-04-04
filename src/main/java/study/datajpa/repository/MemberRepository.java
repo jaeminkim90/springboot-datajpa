@@ -1,6 +1,7 @@
 package study.datajpa.repository;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +34,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	// 여러개의 Parameter을 적용하여 쿼리 조회를 하고, 결과를 컬렉션으로 받을 수 있다.
 	@Query("select m from Member m where m.username in :names")
 	List<Member> findByNames(@Param("names") List<String> names);
+
+	// Spring Data JPA는 반환타입을 다양하게 지원한다
+	List<Member> findListByUsername(String username); // 컬렉션
+	Member findMemberByUsername(String Username); // 단건
+	Optional<Member> findOptionalByUsername(String Username); // 단건 Optional
 
 }
 
