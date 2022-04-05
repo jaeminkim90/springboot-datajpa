@@ -220,23 +220,23 @@ class MemberRepositoryTest {
 		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Direction.DESC, "username"));
 		
 		// when
-		//Page<Member> page = memberRepository.findByAge(age, pageRequest);
+		Page<Member> page = memberRepository.findByAge(age, pageRequest);
 
 		// Page를 사용하면 반환되는 데이터에 total count가 기본으로 포함된다
-//		List<Member> content = page.getContent(); // getContent()를 이용해 데이터를 꺼낼 수 있다
-//		long totalElements = page.getTotalElements();// total count와 동일한 기능을 한다
-//
-//		for (Member member : content) {
-//			System.out.println("member = " + member);
-//		}
-//		System.out.println("totalElements = " + totalElements);
-//
-//		assertThat(content.size()).isEqualTo(3); // 페이지당 사이즈
-//		assertThat(page.getTotalElements()).isEqualTo(10); // 전체 수량
-//		assertThat(page.getNumber()).isEqualTo(0); // 페이지 번호
-//		assertThat(page.getTotalPages()).isEqualTo(4); // 전체 페이지 갯수
-//		assertThat(page.isFirst()).isTrue();
-//		assertThat(page.hasNext()).isTrue();
+		List<Member> content = page.getContent(); // getContent()를 이용해 데이터를 꺼낼 수 있다
+		long totalElements = page.getTotalElements();// total count와 동일한 기능을 한다
+
+		for (Member member : content) {
+			System.out.println("member = " + member);
+		}
+		System.out.println("totalElements = " + totalElements);
+
+		assertThat(content.size()).isEqualTo(3); // 페이지당 사이즈
+		assertThat(page.getTotalElements()).isEqualTo(10); // 전체 수량
+		assertThat(page.getNumber()).isEqualTo(0); // 페이지 번호
+		assertThat(page.getTotalPages()).isEqualTo(4); // 전체 페이지 갯수
+		assertThat(page.isFirst()).isTrue();
+		assertThat(page.hasNext()).isTrue();
 
 	}
 

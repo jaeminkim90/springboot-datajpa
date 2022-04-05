@@ -45,9 +45,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	// 스프링 데이터 JPA를 이용한 페이징과 정렬
 	// 인터페이스만으로도 페이징 기능이 포함된 쿼리를 작성할 수 있다
-	//Page<Member> findByAge(int age, Pageable pageable);
+	@Query(value = "select m from Member m left join m.team t ",
+		countQuery = "select count(m.username) from Member m")
+	Page<Member> findByAge(int age, Pageable pageable);
 
-
-	Slice<Member> findByAge(int age, Pageable pageable);
+//	Slice<Member> findByAge(int age, Pageable pageable);
 }
 
