@@ -240,7 +240,6 @@ class MemberRepositoryTest {
 		assertThat(page.getTotalPages()).isEqualTo(4); // 전체 페이지 갯수
 		assertThat(page.isFirst()).isTrue();
 		assertThat(page.hasNext()).isTrue();
-
 	}
 
 	@Test
