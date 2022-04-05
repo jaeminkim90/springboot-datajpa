@@ -222,6 +222,9 @@ class MemberRepositoryTest {
 		// when
 		Page<Member> page = memberRepository.findByAge(age, pageRequest);
 
+		// 엔티티를 DTO로 쉽게 변환하는 방법
+		Page<MemberDto> toMap = page.map(member -> new MemberDto(member.getId(), member.getUsername(), null));
+
 		// Page를 사용하면 반환되는 데이터에 total count가 기본으로 포함된다
 		List<Member> content = page.getContent(); // getContent()를 이용해 데이터를 꺼낼 수 있다
 		long totalElements = page.getTotalElements();// total count와 동일한 기능을 한다
