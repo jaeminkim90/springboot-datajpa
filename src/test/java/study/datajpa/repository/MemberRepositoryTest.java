@@ -275,4 +275,25 @@ class MemberRepositoryTest {
 		assertThat(slice.hasNext()).isTrue();
 
 	}
+
+	@Test
+	void bulkUpdate() throws Exception{
+
+		// given
+		memberRepository.save(new Member("member1", 10));
+		memberRepository.save(new Member("member2", 19));
+		memberRepository.save(new Member("member3", 20));
+		memberRepository.save(new Member("member4", 21));
+		memberRepository.save(new Member("member5", 40));
+
+		// when
+		int resultCount = memberRepository.bulkAgePlus(20); // expect 3
+
+		// when
+		assertThat(resultCount).isEqualTo(3);
+		List<Member> members = memberRepository.findAll();
+		for (Member member : members) {
+			System.out.println("member.getAge() = " + member.getAge());
+		}
+	}
 }
