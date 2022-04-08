@@ -6,7 +6,6 @@ import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -17,7 +16,7 @@ import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom { // 추가 상속
 
 
 	// 인터페이스에 메서드 이름만 만들어 놓으면 자동으로 메서드를 구현해준다.
@@ -87,5 +86,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	List<Member> findLockByUsername(String username);
+
+
 }
 

@@ -316,7 +316,7 @@ class MemberRepositoryTest {
 		for (Member member : members) {
 			System.out.println("member.getAge() = " + member.getAge());
 		}
-		
+
 		em.clear();
 		List<Member> finalmembers = memberRepository.findAll();
 		for (Member finalmember : finalmembers) {
@@ -338,22 +338,22 @@ class MemberRepositoryTest {
 		Member member2 = new Member("member2", 10, teamB);
 		memberRepository.save(member1);
 		memberRepository.save(member2);
-		
+
 		em.flush();
 		em.clear();
 
 		// when
 		List<Member> members = memberRepository.findEntityGraphByUsername("member1");
- 
+
 		for (Member member : members) {
 
 			System.out.println("member = " + member.getUsername());
 			System.out.println("member.team.name = " + member.getTeam().getName());
 		}
 	}
-	
+
 	@Test
-	void queryHint() throws Exception{
+	void queryHint() throws Exception {
 
 		// given
 		Member member1 = new Member("member1", 10);
@@ -369,7 +369,7 @@ class MemberRepositoryTest {
 	}
 
 	@Test
-	void lock() throws Exception{
+	void lock() throws Exception {
 
 		// given
 		Member member1 = new Member("member1", 10);
@@ -379,7 +379,10 @@ class MemberRepositoryTest {
 
 		// when
 		List<Member> result = memberRepository.findLockByUsername("member1");
+	}
 
-
+	@Test
+	void callCustom() throws Exception {
+		List<Member> result = memberRepository.findMemberCustom();
 	}
 }
