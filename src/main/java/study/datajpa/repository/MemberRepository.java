@@ -64,8 +64,18 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	//JpaRepository가 기본적으로 제공하는 메서드를 override하여 사용한다
 	@Override
-	@EntityGraph(attributePaths = {"team"}) // Spring data JPA를 사용할 때 fetchJoin 사용에 제약이 있다면 @EntityGraph를 사용
+	@EntityGraph(attributePaths = ("team")) // Spring data JPA를 사용할 때 fetchJoin 사용에 제약이 있다면 @EntityGraph를 사용
 	List<Member> findAll();
+
+
+	// 직접 작성한 query에 fetchJoin만 추가하는 것도 가능하다
+	@EntityGraph(attributePaths = {"team"})
+	@Query("select m from Member m")
+	List<Member> findMemberEntityGraph();
+
+	@EntityGraph(attributePaths = ("team"))
+	List<Member> findEntityGraphByUsername(@Param("username") String username);
+
 
 
 }
