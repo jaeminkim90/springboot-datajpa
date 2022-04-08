@@ -2,12 +2,14 @@ package study.datajpa.repository;
 
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
@@ -82,5 +84,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	// 쿼리힌트는 영속성 컨텍스트에 별도의 객체를 생성하지 않는다. 조회 전용으로 사용될 예정이기 때문에 비교를 위한 스냅샷을 만들지 않는다.
 	@QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
 	Member findReadOnlyByUsername(String username);
+
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	List<Member> findLockByUsername(String username);
 }
 
