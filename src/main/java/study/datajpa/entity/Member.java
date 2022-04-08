@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQuery;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,13 +18,15 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 스펙은 기본 생성자를 필요로 한다
 @ToString(of = {"id", "username", "age"}) // 객체를 찍을 때 정보를 바로 출력한다
 @NamedQuery(
 	name = "Member.findByUsername",
-	query ="select m from Member m where m.username = :username"
+	query = "select m from Member m where m.username = :username"
 )
+@NamedEntityGraph(name = "Member.all", attributeNodes = @NamedAttributeNode("team"))
 public class Member {
 
 	@Id
