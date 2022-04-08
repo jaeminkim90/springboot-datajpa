@@ -52,7 +52,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 //	Slice<Member> findByAge(int age, Pageable pageable);
 
-	@Modifying // update를 실행하는 Annotation: 일반 JPA의 executeUpdate() 역할을 한다
+
+	@Modifying(clearAutomatically = true) // update를 실행하는 Annotation: 일반 JPA의 executeUpdate() 역할을 한다. 뺴고 실행하면 에러
 	@Query("update Member m set m.age = m.age +1 where m.age >= :age")
 	int bulkAgePlus(@Param("age") int age);
 }
