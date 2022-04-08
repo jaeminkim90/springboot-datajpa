@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -59,5 +60,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	@Query("select m from Member m left join fetch m.team") // fetch join을 할 때 member와 연관된 엔티티를 한 번에 조회
 	List<Member> findMemberFetchJoin();
+
+
+	//JpaRepository가 기본적으로 제공하는 메서드를 override하여 사용한다
+	@Override
+	@EntityGraph(attributePaths = {"team"}) // Spring data JPA를 사용할 때 fetchJoin 사용에 제약이 있다면 @EntityGraph를 사용
+	List<Member> findAll();
+
+
 }
 
