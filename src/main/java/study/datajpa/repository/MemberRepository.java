@@ -2,6 +2,7 @@ package study.datajpa.repository;
 
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.QueryHint;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
@@ -54,7 +56,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 //	Slice<Member> findByAge(int age, Pageable pageable);
 
 
-	@Modifying(clearAutomatically = true) // update를 실행하는 Annotation: 일반 JPA의 executeUpdate() 역할을 한다. 뺴고 실행하면 에러
+	@Modifying
 	@Query("update Member m set m.age = m.age +1 where m.age >= :age")
 	int bulkAgePlus(@Param("age") int age);
 
@@ -73,10 +75,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("select m from Member m")
 	List<Member> findMemberEntityGraph();
 
-	@EntityGraph(attributePaths = ("team"))
+	@EntityGraph("Member.all") // JPA 표준에서 제공하는 @NamedEntityGraph를 이용하여 fetchJoin하는 방법
 	List<Member> findEntityGraphByUsername(@Param("username") String username);
 
 
-
+	// 쿼리힌트는 영속성 컨텍스트에 별도의 객체를 생성하지 않는다. 조회 전용으로 사용될 예정이기 때문에 비교를 위한 스냅샷을 만들지 않는다.
+	@QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+	Member findReadOnlyByUsername(String username);
 }
 

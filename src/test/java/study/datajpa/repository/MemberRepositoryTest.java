@@ -293,18 +293,34 @@ class MemberRepositoryTest {
 
 		// when
 		int resultCount = memberRepository.bulkAgePlus(20); // expect 3
+		List<Member> dbMemberData = memberRepository.findAll();
+
+		for (Member dbMemberDatum : dbMemberData) {
+			System.out.println("dbMemberDatum = " + dbMemberDatum);
+
+		}
 
 		// 벌크 연산 후에는 영속성 컨텍스트를 모두 비워줘야 한다. 그래야 업데이트 처리된 DB 데이터를 조회할 수 있다
-		em.flush(); // 영속성 컨텍스트에 남아있는 내용을 모두 DB에 반영한다
+
+		//em.flush(); // 영속성 컨텍스트에 남아있는 내용을 모두 DB에 반영한다
 		// clear()는 Repository에 @Modifying(clearAutomatically = true) 옵션을 적용해도 같은 기능을 수행한다.
 		// em.clear(); // 영속성 컨텍스트에 담겨있는 모든 1차 캐시 데이터를 비운다.
 
+		Member findMember = memberRepository.findById(3L).get();
+		findMember.setAge(50);
+		memberRepository.bulkAgePlus(20);
 		// when
 		assertThat(resultCount).isEqualTo(3);
 		List<Member> members = memberRepository.findAll();
 
 		for (Member member : members) {
 			System.out.println("member.getAge() = " + member.getAge());
+		}
+		
+		em.clear();
+		List<Member> finalmembers = memberRepository.findAll();
+		for (Member finalmember : finalmembers) {
+			System.out.println("finalmember.getAge() = " + finalmember.getAge());
 		}
 	}
 
@@ -328,11 +344,27 @@ class MemberRepositoryTest {
 
 		// when
 		List<Member> members = memberRepository.findEntityGraphByUsername("member1");
-
+ 
 		for (Member member : members) {
 
 			System.out.println("member = " + member.getUsername());
 			System.out.println("member.team.name = " + member.getTeam().getName());
 		}
+	}
+	
+	@Test
+	void queryHint() throws Exception{
+
+		// given
+		Member member1 = new Member("member1", 10);
+		memberRepository.save(member1);
+		em.flush();
+		em.clear();
+
+		// when
+		Member findMember = memberRepository.findReadOnlyByUsername("member1"); // queryHints 적용
+		findMember.setUsername("member2");
+
+		em.flush();
 	}
 }
