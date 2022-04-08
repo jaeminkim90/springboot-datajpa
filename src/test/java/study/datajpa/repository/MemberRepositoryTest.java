@@ -36,8 +36,6 @@ class MemberRepositoryTest {
 	EntityManager em;
 
 
-
-
 	@Test
 	void testMember() throws Exception {
 
@@ -208,7 +206,7 @@ class MemberRepositoryTest {
 	}
 
 	@Test
-	void paging() throws Exception{
+	void paging() throws Exception {
 
 		// given
 		memberRepository.save(new Member("member1", 10));
@@ -225,7 +223,7 @@ class MemberRepositoryTest {
 		int age = 10;
 		// PageRequest 객체를 만들고 조건을 세팅한다
 		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Direction.DESC, "username"));
-		
+
 		// when
 		Page<Member> page = memberRepository.findByAge(age, pageRequest);
 
@@ -250,7 +248,7 @@ class MemberRepositoryTest {
 	}
 
 	@Test
-	void sliceTest() throws Exception{
+	void sliceTest() throws Exception {
 
 		// given
 		memberRepository.save(new Member("member1", 10));
@@ -284,7 +282,7 @@ class MemberRepositoryTest {
 	}
 
 	@Test
-	void bulkUpdate() throws Exception{
+	void bulkUpdate() throws Exception {
 
 		// given
 		memberRepository.save(new Member("member1", 10));
@@ -303,10 +301,40 @@ class MemberRepositoryTest {
 
 		// when
 		assertThat(resultCount).isEqualTo(3);
-		List<Member> members = memberRepository. findAll();
+		List<Member> members = memberRepository.findAll();
 
 		for (Member member : members) {
 			System.out.println("member.getAge() = " + member.getAge());
 		}
+	}
+
+	@Test
+	void findMemberLazy() throws Exception {
+		// given
+		// member1 -> teamA
+		// member2 -> teamB
+
+		Team teamA = new Team("teamA");
+		Team teamB = new Team("teamB");
+		teamRepository.save(teamA);
+		teamRepository.save(teamB);
+		Member member1 = new Member("member1", 10, teamA);
+		Member member2 = new Member("member2", 10, teamB);
+		memberRepository.save(member1);
+		memberRepository.save(member2);
+		
+		em.flush();
+		em.clear();
+
+		// when
+		List<Member> members = memberRepository.findMemberFetchJoin();
+
+		for (Member member : members) {
+
+			System.out.println("member = " + member.getUsername());
+			System.out.println("member.team.name = " + member.getTeam().getName());
+		}
+
+		// then
 	}
 }

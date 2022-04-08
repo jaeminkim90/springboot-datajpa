@@ -18,7 +18,7 @@ import lombok.ToString;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 스펙은 기본 생성자를 필요로 한다
-@ToString(of = {"id", "usename", "age"}) // 객체를 찍을 때 정보를 바로 출력한다
+@ToString(of = {"id", "username", "age"}) // 객체를 찍을 때 정보를 바로 출력한다
 @NamedQuery(
 	name = "Member.findByUsername",
 	query ="select m from Member m where m.username = :username"
