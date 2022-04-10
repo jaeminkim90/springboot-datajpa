@@ -36,9 +36,6 @@ public class MemberController {
 		return page;
 	}
 
-
-
-
 	@PostConstruct
 	public void init() {
 		for (int i = 0; i < 100; i++) {
