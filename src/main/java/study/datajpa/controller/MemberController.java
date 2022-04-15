@@ -9,6 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 import study.datajpa.repository.MemberRepository;
 
@@ -33,10 +34,15 @@ public class MemberController {
 	}
 
 	@GetMapping("/members") // @PageableDefault가 글로벌 설정보다 설정 우선권을 갖는다
-	public Page<Member> list(@PageableDefault(size = 5, sort = "username", direction = Sort.Direction.DESC)Pageable pageable) {
+	public Page<MemberDto> list(@PageableDefault(size = 5, sort = "username", direction = Sort.Direction.DESC)Pageable pageable) {
 		// pagable 인터페이스만 넣어도 파라미터로 페이징 설정이 가능하다.
-		Page<Member> page = memberRepository.findAll(pageable);
-		return page;
+		// Page 객체의 map()을 이용하여 page 객체의 데이터 타입을 DTO 타입으로 변환
+		return memberRepository.findAll(pageable).map(member -> new MemberDto(member.getId(), member.getUsername(), null));
+
+		// 인라인 처리 전
+		// Page<Member> page = memberRepository.findAll(pageable);
+//		Page<MemberDto> map = page.map(member -> new MemberDto(member.getId(), member.getUsername(), null));
+//		return map;
 	}
 
 	@PostConstruct // 스프링이 실행될 때 자동으로 실행된다
