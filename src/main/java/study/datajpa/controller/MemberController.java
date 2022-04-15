@@ -37,12 +37,13 @@ public class MemberController {
 	public Page<MemberDto> list(@PageableDefault(size = 5, sort = "username", direction = Sort.Direction.DESC)Pageable pageable) {
 		// pagable 인터페이스만 넣어도 파라미터로 페이징 설정이 가능하다.
 		// Page 객체의 map()을 이용하여 page 객체의 데이터 타입을 DTO 타입으로 변환
-		return memberRepository.findAll(pageable).map(member -> new MemberDto(member.getId(), member.getUsername(), null));
+		return memberRepository.findAll(pageable)
+			.map(MemberDto::new);
 
 		// 인라인 처리 전
 		// Page<Member> page = memberRepository.findAll(pageable);
-//		Page<MemberDto> map = page.map(member -> new MemberDto(member.getId(), member.getUsername(), null));
-//		return map;
+		// Page<MemberDto> map = page.map(member -> new MemberDto(member.getId(), member.getUsername(), null));
+ 		// return map;
 	}
 
 	@PostConstruct // 스프링이 실행될 때 자동으로 실행된다
