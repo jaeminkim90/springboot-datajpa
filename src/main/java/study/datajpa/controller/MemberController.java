@@ -34,7 +34,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/members") // @PageableDefault가 글로벌 설정보다 설정 우선권을 갖는다
-	public Page<MemberDto> list(@PageableDefault(size = 5, sort = "username", direction = Sort.Direction.DESC)Pageable pageable) {
+	public Page<MemberDto> list(@PageableDefault(size = 5)Pageable pageable) {
 		// pagable 인터페이스만 넣어도 파라미터로 페이징 설정이 가능하다.
 		// Page 객체의 map()을 이용하여 page 객체의 데이터 타입을 DTO 타입으로 변환
 		return memberRepository.findAll(pageable)
@@ -46,7 +46,7 @@ public class MemberController {
  		// return map;
 	}
 
-	@PostConstruct // 스프링이 실행될 때 자동으로 실행된다
+	//@PostConstruct // 스프링이 실행될 때 자동으로 실행된다
 	public void init() {
 		for (int i = 0; i < 100; i++) {
 			memberRepository.save(new Member("user" + i, i));
