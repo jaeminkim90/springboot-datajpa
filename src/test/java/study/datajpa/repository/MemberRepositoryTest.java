@@ -63,34 +63,6 @@ class MemberRepositoryTest {
 		assertThat(findMember2).isEqualTo(member);
 	}
 
-	@Test
-	void basicCRUD() throws Exception {
-
-		Member member1 = new Member("member1");
-		Member member2 = new Member("member2");
-		memberRepository.save(member1);
-		memberRepository.save(member2);
-
-		// 단건 조회 검증
-		Member findMember1 = memberRepository.findById(member1.getId()).get();
-		Member findMember2 = memberRepository.findById(member2.getId()).get();
-		assertThat(findMember1).isEqualTo(member1);
-		assertThat(findMember2).isEqualTo(member2);
-
-		// 리스트 조회 검증
-		List<Member> members = memberRepository.findAll();
-		long count = memberRepository.count();
-
-		// 카운트 검증
-		assertThat(members.size()).isEqualTo(count);
-		assertThat(members.size()).isEqualTo(2);
-
-		// 삭제 검증
-		memberRepository.delete(member1);
-		memberRepository.delete(member2);
-		long deletedCount = memberRepository.count();
-		assertThat(deletedCount).isEqualTo(0);
-	}
 
 
 	@Test
@@ -113,17 +85,6 @@ class MemberRepositoryTest {
 	}
 
 
-	@Test
-	void namedQuery() throws Exception {
-		Member m1 = new Member("AAA", 10);
-		Member m2 = new Member("BBB", 20);
-		memberRepository.save(m1);
-		memberRepository.save(m2);
-
-		List<Member> result = memberRepository.findByUsername("AAA");
-		Member findMember = result.get(0);
-		assertThat(findMember).isEqualTo(m1);
-	}
 
 	@Test
 	void testQuery() throws Exception {
@@ -179,73 +140,8 @@ class MemberRepositoryTest {
 		}
 	}
 
-	@Test
-	void returnType() throws Exception {
-		Member m1 = new Member("AAA", 10);
-		Member m2 = new Member("BBB", 20);
-		memberRepository.save(m1);
-		memberRepository.save(m2);
 
-//		List<Member> aaa = memberRepository.findListByUsername("AAA");
-//		System.out.println("aaa = " + aaa);
-//
-//		Member findMember = memberRepository.findMemberByUsername("AAA");
-//		System.out.println("findMember = " + findMember);
-//
-//		Optional<Member> findOptionalMember = memberRepository.findOptionalByUsername("AAA");
-//		System.out.println("findOptionalMember = " + findOptionalMember);
-//		System.out.println("findOptionalMember.get() = " + findOptionalMember.get());
 
-		// 단건 조회시 데이터가 없는 경우
-		Member findNoMember = memberRepository.findMemberByUsername("asdf");
-		System.out.println("findNoMember = " + findNoMember); // Spring Data JPA는 단건 조회시 데이터가 없을 경우 예외 발생 대신 null을 반환한다.
-
-		// 단건 조회 시, 결과가 2개 이상일 경우 예외 발생
-		Optional<Member> findMember = memberRepository.findOptionalByUsername("AAA");
-		System.out.println("findMember = " + findMember);
-	}
-
-	@Test
-	void paging() throws Exception {
-
-		// given
-		memberRepository.save(new Member("member1", 10));
-		memberRepository.save(new Member("member2", 10));
-		memberRepository.save(new Member("member3", 10));
-		memberRepository.save(new Member("member4", 10));
-		memberRepository.save(new Member("member5", 10));
-		memberRepository.save(new Member("member6", 10));
-		memberRepository.save(new Member("member7", 10));
-		memberRepository.save(new Member("member8", 10));
-		memberRepository.save(new Member("member9", 10));
-		memberRepository.save(new Member("member99", 10));
-
-		int age = 10;
-		// PageRequest 객체를 만들고 조건을 세팅한다
-		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Direction.DESC, "username"));
-
-		// when
-		Page<Member> page = memberRepository.findByAge(age, pageRequest);
-
-		// 엔티티를 DTO로 쉽게 변환하는 방법
-		Page<MemberDto> toMap = page.map(member -> new MemberDto(member.getId(), member.getUsername(), null));
-
-		// Page를 사용하면 반환되는 데이터에 total count가 기본으로 포함된다
-		List<Member> content = page.getContent(); // getContent()를 이용해 데이터를 꺼낼 수 있다
-		long totalElements = page.getTotalElements();// total count와 동일한 기능을 한다
-
-		for (Member member : content) {
-			System.out.println("member = " + member);
-		}
-		System.out.println("totalElements = " + totalElements);
-
-		assertThat(content.size()).isEqualTo(3); // 페이지당 사이즈
-		assertThat(page.getTotalElements()).isEqualTo(10); // 전체 수량
-		assertThat(page.getNumber()).isEqualTo(0); // 페이지 번호
-		assertThat(page.getTotalPages()).isEqualTo(4); // 전체 페이지 갯수
-		assertThat(page.isFirst()).isTrue();
-		assertThat(page.hasNext()).isTrue();
-	}
 
 	@Test
 	void sliceTest() throws Exception {
@@ -281,76 +177,7 @@ class MemberRepositoryTest {
 
 	}
 
-	@Test
-	void bulkUpdate() throws Exception {
 
-		// given
-		memberRepository.save(new Member("member1", 10));
-		memberRepository.save(new Member("member2", 19));
-		memberRepository.save(new Member("member3", 20));
-		memberRepository.save(new Member("member4", 21));
-		memberRepository.save(new Member("member5", 40));
-
-		// when
-		int resultCount = memberRepository.bulkAgePlus(20); // expect 3
-		List<Member> dbMemberData = memberRepository.findAll();
-
-		for (Member dbMemberDatum : dbMemberData) {
-			System.out.println("dbMemberDatum = " + dbMemberDatum);
-
-		}
-
-		// 벌크 연산 후에는 영속성 컨텍스트를 모두 비워줘야 한다. 그래야 업데이트 처리된 DB 데이터를 조회할 수 있다
-
-		//em.flush(); // 영속성 컨텍스트에 남아있는 내용을 모두 DB에 반영한다
-		// clear()는 Repository에 @Modifying(clearAutomatically = true) 옵션을 적용해도 같은 기능을 수행한다.
-		// em.clear(); // 영속성 컨텍스트에 담겨있는 모든 1차 캐시 데이터를 비운다.
-
-		Member findMember = memberRepository.findById(3L).get();
-		findMember.setAge(50);
-		memberRepository.bulkAgePlus(20);
-		// when
-		assertThat(resultCount).isEqualTo(3);
-		List<Member> members = memberRepository.findAll();
-
-		for (Member member : members) {
-			System.out.println("member.getAge() = " + member.getAge());
-		}
-
-		em.clear();
-		List<Member> finalmembers = memberRepository.findAll();
-		for (Member finalmember : finalmembers) {
-			System.out.println("finalmember.getAge() = " + finalmember.getAge());
-		}
-	}
-
-	@Test
-	void findMemberLazy() throws Exception {
-		// given
-		// member1 -> teamA
-		// member2 -> teamB
-
-		Team teamA = new Team("teamA");
-		Team teamB = new Team("teamB");
-		teamRepository.save(teamA);
-		teamRepository.save(teamB);
-		Member member1 = new Member("member1", 10, teamA);
-		Member member2 = new Member("member2", 10, teamB);
-		memberRepository.save(member1);
-		memberRepository.save(member2);
-
-		em.flush();
-		em.clear();
-
-		// when
-		List<Member> members = memberRepository.findEntityGraphByUsername("member1");
-
-		for (Member member : members) {
-
-			System.out.println("member = " + member.getUsername());
-			System.out.println("member.team.name = " + member.getTeam().getName());
-		}
-	}
 
 	@Test
 	void queryHint() throws Exception {
