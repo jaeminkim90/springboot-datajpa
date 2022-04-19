@@ -23,4 +23,10 @@ public class MemberSpec {
 			return criteriaBuilder.equal(t.get("name"), teamName);
 		};
 	}
+
+	public static Specification<Member> username(final String username) {
+
+		return(Specification<Member>)(root, query, criteriaBuilder) ->
+			criteriaBuilder.equal(root.get("username"), username);
+	}
 }
