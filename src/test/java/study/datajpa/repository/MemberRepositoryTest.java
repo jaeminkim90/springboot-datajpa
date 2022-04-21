@@ -291,7 +291,7 @@ class MemberRepositoryTest {
 		List<UsernameOnly> result = memberRepository.findProjectionsByUsername("m1");
 
 		for (UsernameOnly usernameOnly : result) {
-			System.out.println("usernameOnly = " + usernameOnly);
+			System.out.println("usernameOnly = " + usernameOnly.getUsername());
 		}
 
 
