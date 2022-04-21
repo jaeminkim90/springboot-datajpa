@@ -288,7 +288,7 @@ class MemberRepositoryTest {
 		// when
 		// 엔티티의 특정 필드만 조회하고 싶을 때는
 		// UsernameOnly 인터페이스만 만들면 실제 구현체는 Spring Data JPA가 만든다
-		List<UsernameOnlyDto> result = memberRepository.findProjectionsByUsername("m1");
+		List<UsernameOnlyDto> result = memberRepository.findProjectionsByUsername("m1", UsernameOnlyDto.class);
 
 		for (UsernameOnlyDto usernameOnlyDto : result) {
 			System.out.println("usernameOnly = " + usernameOnlyDto.getUsername());

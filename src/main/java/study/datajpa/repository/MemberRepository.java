@@ -89,7 +89,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 	List<Member> findLockByUsername(String username);
 
 	// 반환타입에 인터페이스를 넣는다. 메서드명은 자유, 반환 타입으로 인지한다
-	<T> List<T> findProjectionsByUsername(@Param("username") String username, UsernameOnlyDto.class);
+	<T> List<T> findProjectionsByUsername(@Param("username") String username, Class<T> type);
 	// Generic type을 주면, 동적으로 프로젝션 데이터 번경 가능. type만 넘기면 사용할 수 있다
 
 
