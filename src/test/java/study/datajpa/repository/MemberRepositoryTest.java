@@ -255,10 +255,11 @@ class MemberRepositoryTest {
 		// when
 		// Probe
 		Member member = new Member("m1"); // Member 객체 자체가 검색 조거니 된다
-
+		Team team = new Team("teamA");
+		member.setTeam(team);
 		// 무시
 		ExampleMatcher matcher = ExampleMatcher.matching()
-			.withIgnorePaths("age"); // age라는 속성은 무시하는 설정
+			.withIgnorePaths("age"); // age라는 속성은 무시하는 설정(기본적으로 null 이면 무시하지만 primitive 타입은 null이 없다)
 
 
 		Example<Member> example = Example.of(member, matcher); // matcher 조건은 Example의 두 번째 파라미터로 넣을 수 있다
