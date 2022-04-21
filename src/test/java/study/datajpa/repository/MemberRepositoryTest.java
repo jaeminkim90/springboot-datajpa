@@ -293,5 +293,20 @@ class MemberRepositoryTest {
 		for (UsernameOnlyDto usernameOnlyDto : result) {
 			System.out.println("usernameOnly = " + usernameOnlyDto.getUsername());
 		}
+
+		// 중첩구조
+		// 중첩구조에서는 첫번째 depth의 필드값은 정확하게 최적화가 된다.
+		// 두번째 depth(중첩된 엔티티)는 엔티티 전체를 불러온다. 최적화가 안된다.
+		// 조인은 left join을 사용한다
+		List<NestedClosedProjections> result2 = memberRepository.findProjectionsByUsername("m1", NestedClosedProjections.class);
+
+		for (NestedClosedProjections nestedClosedProjections : result2) {
+			String username = nestedClosedProjections.getUsername();
+			System.out.println("username = " + username);
+			String teamName = nestedClosedProjections.getTeam().getName();
+			System.out.println("teamName = " + teamName);
+
+		}
+
 	}
 }
