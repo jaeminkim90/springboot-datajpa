@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -255,10 +256,17 @@ class MemberRepositoryTest {
 		// Probe
 		Member member = new Member("m1"); // Member 객체 자체가 검색 조거니 된다
 
-		Example<Member> example = Example.of(member);
+		// 무시
+		ExampleMatcher matcher = ExampleMatcher.matching()
+			.withIgnorePaths("age"); // age라는 속성은 무시하는 설정
+
+
+		Example<Member> example = Example.of(member, matcher); // matcher 조건은 Example의 두 번째 파라미터로 넣을 수 있다
 
 		List<Member> result = memberRepository.findAll(example);
 		result.stream().forEach(m -> System.out.println("m = " + m));
+
+		assertThat(result.get(0).getUsername()).isEqualTo("m1");
 
 
 
