@@ -324,4 +324,34 @@ class MemberRepositoryTest {
 
 		// then
 	}
+
+	@Test
+	void nativeProjectionQuery() throws Exception {
+		// Projection 방식의 native 쿼리 사용 테스트
+
+		// given
+		Team teamA = new Team("teamA");
+		em.persist(teamA);
+
+		Member m1 = new Member("m1", 0, teamA);
+		Member m2 = new Member("m2", 0, teamA);
+		em.persist(m1);
+		em.persist(m2);
+
+		em.flush();
+		em.clear();
+
+		// when
+		Page<MemberProjection> result = memberRepository.findByNativeProjection(PageRequest.of(0, 10));
+		// native 쿼리의 결과를 projection 타입으로 받는다
+		
+		List<MemberProjection> content = result.getContent(); 
+		// page의 content 영역을 projection 타입으로 바꾼다
+		
+		for (MemberProjection memberProjection : content) {
+			System.out.println("memberProjection.getId() = " + memberProjection.getId());
+			System.out.println("memberProjection.getUsername() = " + memberProjection.getUsername());
+			System.out.println("memberProjection.getTeamName()) = " + memberProjection.getTeamName());
+		}
+	}
 }
