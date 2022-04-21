@@ -92,6 +92,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 	<T> List<T> findProjectionsByUsername(@Param("username") String username, Class<T> type);
 	// Generic type을 주면, 동적으로 프로젝션 데이터 번경 가능. type만 넘기면 사용할 수 있다
 
-
+	@Query(value = "select * from member where username = ?", nativeQuery = true)
+	Member findByNativeQuery(String username);
 }
 

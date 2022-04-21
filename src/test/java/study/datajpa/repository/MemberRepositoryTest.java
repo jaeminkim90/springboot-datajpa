@@ -68,7 +68,6 @@ class MemberRepositoryTest {
 	}
 
 
-
 	@Test
 	public void findByUsernameAndAgeGreaterThenTest() {
 		Member m1 = new Member("AAA", 10);
@@ -87,7 +86,6 @@ class MemberRepositoryTest {
 	void findHelloBy() throws Exception {
 		List<Member> helloBy = memberRepository.findTop2HelloBy();
 	}
-
 
 
 	@Test
@@ -145,8 +143,6 @@ class MemberRepositoryTest {
 	}
 
 
-
-
 	@Test
 	void sliceTest() throws Exception {
 
@@ -180,7 +176,6 @@ class MemberRepositoryTest {
 		assertThat(slice.hasNext()).isTrue();
 
 	}
-
 
 
 	@Test
@@ -239,7 +234,7 @@ class MemberRepositoryTest {
 	}
 
 	@Test
-	void queryByExample() throws Exception{
+	void queryByExample() throws Exception {
 		// given
 		Team teamA = new Team("teamA");
 		em.persist(teamA);
@@ -305,8 +300,28 @@ class MemberRepositoryTest {
 			System.out.println("username = " + username);
 			String teamName = nestedClosedProjections.getTeam().getName();
 			System.out.println("teamName = " + teamName);
-
 		}
+	}
 
+	@Test
+	void nativeQuery() throws Exception {
+
+		// given
+		Team teamA = new Team("teamA");
+		em.persist(teamA);
+
+		Member m1 = new Member("m1", 0, teamA);
+		Member m2 = new Member("m2", 0, teamA);
+		em.persist(m1);
+		em.persist(m2);
+
+		em.flush();
+		em.clear();
+
+		// when
+		Member result = memberRepository.findByNativeQuery("m1");
+		System.out.println("result = " + result);
+
+		// then
 	}
 }
