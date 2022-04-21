@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -234,5 +235,32 @@ class MemberRepositoryTest {
 		Specification<Member> spec = MemberSpec.username("m1").and(MemberSpec.teamName("teamA"));
 		List result = memberRepository.findAll(spec);
 		assertThat(result.size()).isEqualTo(1);
+	}
+
+	@Test
+	void queryByExample() throws Exception{
+		// given
+		Team teamA = new Team("teamA");
+		em.persist(teamA);
+
+		Member m1 = new Member("m1", 0, teamA);
+		Member m2 = new Member("m2", 0, teamA);
+		em.persist(m1);
+		em.persist(m2);
+
+		em.flush();
+		em.clear();
+
+		// when
+		// Probe
+		Member member = new Member("m1"); // Member 객체 자체가 검색 조거니 된다
+
+		Example<Member> example = Example.of(member);
+
+		List<Member> result = memberRepository.findAll(example);
+		result.stream().forEach(m -> System.out.println("m = " + m));
+
+
+
 	}
 }
