@@ -257,18 +257,42 @@ class MemberRepositoryTest {
 		Member member = new Member("m1"); // Member 객체 자체가 검색 조거니 된다
 		Team team = new Team("teamA");
 		member.setTeam(team);
-		// 무시
+
+		// 특정 필드를 일치시키는 상세한 정보 제공, 재사용 가능
 		ExampleMatcher matcher = ExampleMatcher.matching()
 			.withIgnorePaths("age"); // age라는 속성은 무시하는 설정(기본적으로 null 이면 무시하지만 primitive 타입은 null이 없다)
 
-
+		// Probe와 ExampleMatcher로 구성, 쿼리를 생성하는데 사용
 		Example<Member> example = Example.of(member, matcher); // matcher 조건은 Example의 두 번째 파라미터로 넣을 수 있다
 
 		List<Member> result = memberRepository.findAll(example);
 		result.stream().forEach(m -> System.out.println("m = " + m));
 
 		assertThat(result.get(0).getUsername()).isEqualTo("m1");
+	}
 
+	@Test
+	public void projections() {
+		// given
+		Team teamA = new Team("teamA");
+		em.persist(teamA);
+
+		Member m1 = new Member("m1", 0, teamA);
+		Member m2 = new Member("m2", 0, teamA);
+		em.persist(m1);
+		em.persist(m2);
+
+		em.flush();
+		em.clear();
+
+		// when
+		// 엔티티의 특정 필드만 조회하고 싶을 때는
+		// UsernameOnly 인터페이스만 만들면 실제 구현체는 Spring Data JPA가 만든다
+		List<UsernameOnly> result = memberRepository.findProjectionsByUsername("m1");
+
+		for (UsernameOnly usernameOnly : result) {
+			System.out.println("usernameOnly = " + usernameOnly);
+		}
 
 
 	}
